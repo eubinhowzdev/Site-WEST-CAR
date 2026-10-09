@@ -1110,7 +1110,8 @@ img {
   }
 
   .hero-lineup {
-    bottom: 52px;
+    top: 235px;
+    bottom: auto;
     height: 315px;
   }
 
@@ -1309,6 +1310,7 @@ img {
   }
 
   .hero-lineup {
+    top: 230px;
     height: 285px;
   }
 
