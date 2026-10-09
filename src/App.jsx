@@ -6,7 +6,6 @@ import {
   MessageCircle,
   ShieldCheck,
   Award,
-  Sparkles,
   ArrowRight,
   Play,
   Car,
@@ -204,28 +203,22 @@ export function App() {
       </header>
 
       {/* ===================================================================
-          2. HERO SECTION (Exata Estrutura da Referência Master)
+          2. HERO SECTION (Layout Fiel à Referência: Título + Carros Integrados)
           =================================================================== */}
       <section className="hero-section">
-        <div className="container" style={{ textAlign: 'center', position: 'relative', zIndex: 2 }}>
-          {/* Tag de Marca */}
-          <div className="hero-badge-tag">
-            <Sparkles size={14} />
-            <span>Estoque Selecionado · Procedência Comprovada</span>
-          </div>
-
-          {/* Título Principal com Tipografia Estendida Automotiva (Unbounded) */}
+        <div className="container hero-content-wrapper">
+          {/* Título Principal - Grande e Impactante */}
           <h1 className="hero-title">
-            SEU PRÓXIMO CARRO<br />
-            <span className="highlight-red">COM PROCEDÊNCIA &amp; EXCLUSIVIDADE</span>
+            VEÍCULOS SELECIONADOS<br />
+            <span className="highlight-red-italic">COM PROCEDÊNCIA & EXCLUSIVIDADE</span>
           </h1>
 
-          {/* Subtítulo conciso e persuasivo */}
+          {/* Subtítulo conciso */}
           <p className="hero-subtitle">
-            Mais de uma década realizando sonhos sobre quatro rodas. Estoque periciado com laudo cautelar 100% aprovado, garantia total e as melhores condições de financiamento.
+            Mais de uma década realizando sonhos sobre quatro rodas. Estoque periciado com laudo cautelar 100% aprovado, garantia e as melhores condições.
           </p>
 
-          {/* Botões de Ação da Hero (Idênticos à Referência Master) */}
+          {/* Botões de Ação */}
           <div className="hero-cta-group">
             <button className="btn-primary-pill" onClick={scrollToCatalog}>
               <span>Explorar Estoque</span>
@@ -239,8 +232,10 @@ export function App() {
               <span>Tour Virtual da Loja</span>
             </button>
           </div>
+        </div>
 
-          {/* Lineup Panorâmico de 5 Veículos Real de Estúdio */}
+        {/* Lineup Panorâmico de Carros - Integrado ao Fundo (Sem Moldura) */}
+        <div className="hero-cars-container">
           <HeroLineup onSelectVehicle={handleSelectVehicleById} />
         </div>
       </section>

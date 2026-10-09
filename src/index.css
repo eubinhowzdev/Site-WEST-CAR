@@ -271,38 +271,28 @@ a {
 }
 
 /* ==========================================================================
-   HERO SECTION (Identical Architecture to Reference Master)
+   HERO SECTION (Layout Fiel à Referência: Fundo Claro + Carros Integrados)
    ========================================================================== */
 
 .hero-section {
   position: relative;
-  background: linear-gradient(180deg, #FFFFFF 0%, #F5F7FA 70%, #E9ECEF 100%);
+  background: linear-gradient(180deg, #FFFFFF 0%, #F7F8FA 60%, #ECEEF2 100%);
   padding-top: 3.5rem;
-  padding-bottom: 7rem;
+  padding-bottom: 0;
   overflow: hidden;
 }
 
-.hero-badge-tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.35rem 1rem;
-  border-radius: 9999px;
-  background: rgba(229, 36, 45, 0.08);
-  border: 1px solid rgba(229, 36, 45, 0.2);
-  color: var(--wc-red-primary);
-  font-size: 0.8rem;
-  font-weight: 800;
-  letter-spacing: 0.8px;
-  text-transform: uppercase;
-  margin-bottom: 1.25rem;
+.hero-content-wrapper {
+  text-align: center;
+  position: relative;
+  z-index: 2;
 }
 
 .hero-title {
   font-family: var(--font-display);
-  font-size: clamp(2.2rem, 5vw, 4rem);
-  font-weight: 800;
-  line-height: 1.1;
+  font-size: clamp(2.4rem, 5.5vw, 4.2rem);
+  font-weight: 900;
+  line-height: 1.08;
   letter-spacing: -0.02em;
   color: var(--wc-obsidian-900);
   text-transform: uppercase;
@@ -312,19 +302,22 @@ a {
   text-align: center;
 }
 
-.hero-title .highlight-red {
+/* Segunda linha do título em itálico com cor vermelha da marca (fiel à referência) */
+.hero-title .highlight-red-italic {
+  font-style: italic;
   background: linear-gradient(135deg, #FF3542 0%, #E5242D 60%, #A30D14 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  background-clip: text;
   display: inline-block;
   position: relative;
 }
 
 .hero-subtitle {
-  font-size: clamp(1rem, 1.8vw, 1.2rem);
+  font-size: clamp(0.95rem, 1.6vw, 1.15rem);
   color: var(--wc-text-secondary);
-  max-width: 680px;
-  margin: 1.25rem auto 2.25rem;
+  max-width: 640px;
+  margin: 1rem auto 2rem;
   text-align: center;
   font-weight: 400;
   line-height: 1.6;
@@ -335,7 +328,7 @@ a {
   align-items: center;
   justify-content: center;
   gap: 1.25rem;
-  margin-bottom: 3rem;
+  margin-bottom: 2.5rem;
   flex-wrap: wrap;
 }
 
@@ -403,22 +396,27 @@ a {
 }
 
 /* ==========================================================================
-   HERO CAR LINEUP (Panorama de Estúdio Fiel à Referência Master)
+   HERO CAR LINEUP (Integrado ao Fundo - Sem Moldura, como na Referência)
    ========================================================================== */
+
+.hero-cars-container {
+  position: relative;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+}
 
 .hero-panorama-wrapper {
   position: relative;
   width: 100%;
-  max-width: 1180px;
-  margin: 1rem auto 0;
   overflow: visible;
 }
 
 .hero-panorama-stage {
   position: relative;
   width: 100%;
-  aspect-ratio: 16 / 9;
-  max-height: 520px;
+  aspect-ratio: 16 / 7;
+  max-height: 560px;
   background: transparent;
 }
 
@@ -426,19 +424,20 @@ a {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center bottom;
   display: block;
   user-select: none;
-  border-radius: 20px;
-  box-shadow: 0 16px 45px -12px rgba(11, 17, 22, 0.12);
+  /* SEM border-radius, SEM box-shadow — carros integrados ao fundo como na referência */
 }
 
+/* Degradê inferior para blend suave com a próxima seção */
 .hero-panorama-blend {
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
-  height: 60px;
-  background: linear-gradient(180deg, transparent 0%, rgba(255, 255, 255, 0.85) 70%, #FFFFFF 100%);
+  height: 80px;
+  background: linear-gradient(180deg, transparent 0%, #ECEEF2 80%, var(--wc-canvas-light) 100%);
   pointer-events: none;
 }
 
