@@ -36,9 +36,9 @@ export async function loadVehicles() {
       .order('sort_order', { ascending: true });
 
     if (error) throw error;
-    return rows.length > 0 ? rows.map(mapVehicleFromDatabase) : VEHICLES_DATA;
+    return (rows || []).map(mapVehicleFromDatabase);
   } catch (error) {
-    console.warn('Catálogo remoto indisponível; usando os dados locais.', error);
-    return VEHICLES_DATA;
+    console.warn('Catálogo remoto indisponível.', error);
+    return [];
   }
 }

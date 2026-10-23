@@ -9,3 +9,4 @@
 /.opencode
 .env.local
 .env.*.local
+/work/

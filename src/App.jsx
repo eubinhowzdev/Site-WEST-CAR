@@ -1,20 +1,21 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
   ArrowRight,
+  Car,
   CalendarDays,
-  CheckCircle2,
+  ChevronDown,
+  Cog,
   Fuel,
+  MapPinned,
   Menu,
-  MessageCircle,
   Phone,
   Search,
-  Settings2,
   X
 } from 'lucide-react';
 import { STORE_INFO } from './data/vehicles';
 import { loadVehicles } from './lib/catalog';
 import { WestCarLogo } from './components/WestCarLogo';
-import { HeroLineup } from './components/HeroLineup';
+import { WhatsAppMark } from './components/WhatsAppMark';
 import { VehicleModal } from './components/VehicleModal';
 
 const formatPrice = (value) =>
@@ -30,9 +31,39 @@ export default function App() {
   const [selectedCategory, setSelectedCategory] = useState('Todos');
   const [query, setQuery] = useState('');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const heroPhotoRef = useRef(null);
 
   useEffect(() => {
     loadVehicles().then(setVehicles);
+  }, []);
+
+  useEffect(() => {
+    const photo = heroPhotoRef.current;
+    if (!photo || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      if (window.innerWidth <= 760) {
+        photo.style.removeProperty('--hero-parallax');
+        return;
+      }
+      const photoTop = photo.parentElement.getBoundingClientRect().top;
+      const shift = Math.min(40, Math.max(0, -photoTop * 0.12));
+      photo.style.setProperty('--hero-parallax', `${shift}px`);
+    };
+    const schedule = () => {
+      if (!frame) frame = window.requestAnimationFrame(update);
+    };
+
+    schedule();
+    window.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('resize', schedule);
+    return () => {
+      window.removeEventListener('scroll', schedule);
+      window.removeEventListener('resize', schedule);
+      window.cancelAnimationFrame(frame);
+    };
   }, []);
 
   const categories = useMemo(
@@ -75,8 +106,8 @@ export default function App() {
               <Phone size={17} />
               <span>{STORE_INFO.phoneDisplay}</span>
             </a>
-            <a className="button button-small button-dark" href={STORE_INFO.whatsappHref} target="_blank" rel="noreferrer">
-              Falar com a loja
+            <a className="button button-small button-dark" href={STORE_INFO.whatsappHref} target="_blank" rel="noopener noreferrer">
+              <WhatsAppMark size={18} /> Falar no WhatsApp
             </a>
             <button
               className="mobile-menu-button"
@@ -101,31 +132,35 @@ export default function App() {
 
       <main>
         <section id="inicio" className="hero-section">
-          <div className="page-width hero-content">
-            <h1>
-              CARRO BOM,
-              <span> PREÇO JUSTO</span>
-              <br />E ATENDIMENTO DE VERDADE.
-            </h1>
-            <div className="hero-actions">
-              <button className="button button-primary" type="button" onClick={scrollToCatalog}>
-                Ver veículos
-                <ArrowRight size={19} />
-              </button>
-              <a className="button button-light" href={STORE_INFO.whatsappHref} target="_blank" rel="noreferrer">
-                <MessageCircle size={18} />
-                WhatsApp
-              </a>
+          <div className="hero-visual">
+            <div className="hero-photo">
+              <img ref={heroPhotoRef} src="/images/west-car-fachada.jpeg" alt="Fachada da loja West Car Multimarcas" fetchPriority="high" />
             </div>
           </div>
 
-          <HeroLineup />
-
-          <div className="page-width hero-trust-row" aria-label="Compromissos da West Car">
-            <span><CheckCircle2 size={17} /> Estoque real</span>
-            <span><CheckCircle2 size={17} /> Atendimento direto</span>
-            <span><CheckCircle2 size={17} /> Informações transparentes</span>
+          <div className="page-width hero-intro">
+            <div className="hero-copy">
+              <h1>CARRO BOM,<br /><span>PREÇO JUSTO</span><br />E ATENDIMENTO DE VERDADE.</h1>
+            </div>
+            <div className="hero-actions">
+              <button className="hero-action hero-action-stock" type="button" onClick={scrollToCatalog}>
+                <Car size={23} strokeWidth={2.25} />
+                <span>Veículos em estoque</span>
+              </button>
+              <a className="hero-action hero-action-whatsapp" href={STORE_INFO.whatsappHref} target="_blank" rel="noopener noreferrer">
+                <WhatsAppMark size={23} />
+                <span>Atendimento pelo WhatsApp</span>
+              </a>
+              <a className="hero-action hero-action-location" href={STORE_INFO.mapsHref} target="_blank" rel="noopener noreferrer">
+                <MapPinned size={23} strokeWidth={2.15} />
+                <span>Localização da loja</span>
+              </a>
+            </div>
           </div>
+          <a className="hero-scroll-cue" href="#veiculos">
+            <span>Confira o estoque</span>
+            <ChevronDown size={19} strokeWidth={2.25} aria-hidden="true" />
+          </a>
         </section>
 
         <section id="veiculos" className="catalog-section">
@@ -183,7 +218,7 @@ export default function App() {
 
                       <div className="vehicle-quick-specs">
                         <span><CalendarDays size={16} /> {vehicle.year}</span>
-                        <span><Settings2 size={16} /> {vehicle.transmission}</span>
+                        <span><Cog size={16} /> {vehicle.transmission}</span>
                         <span><Fuel size={16} /> {vehicle.fuel}</span>
                       </div>
 
@@ -220,7 +255,7 @@ export default function App() {
               <p>Confirme a disponibilidade, tire suas dúvidas e combine uma visita.</p>
             </div>
             <a className="contact-phone" href={STORE_INFO.whatsappHref} target="_blank" rel="noreferrer">
-              <span className="contact-phone-icon"><MessageCircle size={26} /></span>
+              <span className="contact-phone-icon"><WhatsAppMark variant="green" size={29} /></span>
               <span>
                 <small>WhatsApp da West Car</small>
                 <strong>{STORE_INFO.whatsappDisplay}</strong>
@@ -239,8 +274,8 @@ export default function App() {
         </div>
       </footer>
 
-      <a className="floating-call" href={STORE_INFO.whatsappHref} target="_blank" rel="noreferrer" aria-label="Abrir o WhatsApp da West Car">
-        <MessageCircle size={21} />
+      <a className="floating-call" href={STORE_INFO.whatsappHref} target="_blank" rel="noopener noreferrer" aria-label="Abrir o WhatsApp da West Car">
+        <WhatsAppMark size={22} />
         <span>WhatsApp West Car</span>
       </a>
 

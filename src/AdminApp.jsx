@@ -3,7 +3,7 @@ import {
   ArrowLeft,
   ArrowRight,
   Camera,
-  CarFront,
+  Car,
   Check,
   CheckCircle2,
   ChevronLeft,
@@ -430,7 +430,7 @@ function VehicleEditor({ initialVehicle, onCancel, onSaved }) {
         <section className="admin-form-card">
           {step === 1 && (
             <>
-              <div className="admin-section-title"><CarFront /><div><h2>Informações principais</h2><p>Dados que aparecem primeiro no catálogo.</p></div></div>
+              <div className="admin-section-title"><Car /><div><h2>Informações principais</h2><p>Dados que aparecem primeiro no catálogo.</p></div></div>
               <div className="admin-form-grid">
                 <label><span>Marca *</span><input value={vehicle.brand} onChange={(event) => update('brand', event.target.value)} placeholder="Ex.: Fiat" maxLength={50} /></label>
                 <label><span>Modelo *</span><input value={vehicle.model} onChange={(event) => update('model', event.target.value)} placeholder="Ex.: Argo Drive" maxLength={80} /></label>
@@ -576,7 +576,7 @@ function AdminDashboard({ onLogout }) {
         <section className="admin-summary" aria-label="Resumo do estoque">
           <article><span className="green"><CheckCircle2 /></span><div><strong>{publishedCount}</strong><p>Publicados</p></div></article>
           <article><span className="gray"><EyeOff /></span><div><strong>{hiddenCount}</strong><p>Fora do site</p></div></article>
-          <article><span className="red"><CarFront /></span><div><strong>{vehicles.length}</strong><p>Total de veículos</p></div></article>
+          <article><span className="red"><Car /></span><div><strong>{vehicles.length}</strong><p>Total de veículos</p></div></article>
         </section>
 
         <div className="admin-list-heading">
@@ -589,12 +589,12 @@ function AdminDashboard({ onLogout }) {
         {loading ? (
           <div className="admin-loading"><LoaderCircle className="spin" /><p>Carregando veículos...</p></div>
         ) : vehicles.length === 0 ? (
-          <div className="admin-empty"><CarFront /><h2>Nenhum veículo cadastrado</h2><p>Use o botão abaixo para adicionar o primeiro.</p><button className="admin-primary-button" type="button" onClick={() => setEditorVehicle(createEmptyVehicle(1))}><Plus /> Adicionar veículo</button></div>
+          <div className="admin-empty"><Car /><h2>Nenhum veículo cadastrado</h2><p>Use o botão abaixo para adicionar o primeiro.</p><button className="admin-primary-button" type="button" onClick={() => setEditorVehicle(createEmptyVehicle(1))}><Plus /> Adicionar veículo</button></div>
         ) : (
           <section className="admin-vehicle-list">
             {vehicles.map((vehicle) => (
               <article className="admin-vehicle-card" key={vehicle.id}>
-                <div className="admin-vehicle-photo">{vehicle.images[0] ? <img src={vehicle.images[0]} alt={`${vehicle.brand} ${vehicle.model}`} /> : <CarFront />}</div>
+                <div className="admin-vehicle-photo">{vehicle.images[0] ? <img src={vehicle.images[0]} alt={`${vehicle.brand} ${vehicle.model}`} /> : <Car />}</div>
                 <div className="admin-vehicle-info">
                   <span className={`admin-status ${vehicle.available ? 'published' : 'hidden'}`}>{vehicle.available ? 'Publicado' : 'Fora do site'}</span>
                   <h3>{vehicle.brand} {vehicle.model}</h3>
@@ -611,7 +611,6 @@ function AdminDashboard({ onLogout }) {
         )}
       </main>
 
-      <button className="admin-mobile-add" type="button" onClick={() => setEditorVehicle(createEmptyVehicle(vehicles.length + 1))}><Plus /> Adicionar veículo</button>
     </div>
   );
 }

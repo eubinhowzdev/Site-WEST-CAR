@@ -137,5 +137,6 @@ export const STORE_INFO = {
   phoneDisplay: '(49) 3329-5555',
   phoneHref: 'tel:+554933295555',
   whatsappDisplay: '(49) 3329-5555',
-  whatsappHref: 'https://wa.me/554933295555'
+  whatsappHref: 'https://wa.me/554933295555',
+  mapsHref: 'https://www.google.com/maps/search/?api=1&query=West%20Car%20Multimarcas%20Chapec%C3%B3%20SC%2049%203329-5555'
 };

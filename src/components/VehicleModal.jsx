@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   ArrowLeft,
   ArrowRight,
   CalendarDays,
-  Check,
+  Cog,
   Fuel,
   Gauge,
-  MessageCircle,
   Palette,
-  Settings2,
+  Wrench,
   X
 } from 'lucide-react';
 import { STORE_INFO } from '../data/vehicles';
+import { WhatsAppMark } from './WhatsAppMark';
 
 const formatPrice = (value) =>
   new Intl.NumberFormat('pt-BR', {
@@ -22,16 +22,36 @@ const formatPrice = (value) =>
 
 export function VehicleModal({ vehicle, onClose }) {
   const [activeImage, setActiveImage] = useState(0);
+  const modalRef = useRef(null);
+  const closeRef = useRef(null);
 
   useEffect(() => {
     const previousOverflow = document.body.style.overflow;
+    const previousFocus = document.activeElement;
     document.body.style.overflow = 'hidden';
-    const closeOnEscape = (event) => event.key === 'Escape' && onClose();
-    window.addEventListener('keydown', closeOnEscape);
+    closeRef.current?.focus();
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') onClose();
+      if (event.key !== 'Tab') return;
+
+      const focusable = [...modalRef.current.querySelectorAll('button:not(:disabled), a[href]')];
+      if (!focusable.length) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
 
     return () => {
       document.body.style.overflow = previousOverflow;
-      window.removeEventListener('keydown', closeOnEscape);
+      window.removeEventListener('keydown', handleKeyDown);
+      previousFocus?.focus();
     };
   }, [onClose]);
 
@@ -43,8 +63,8 @@ export function VehicleModal({ vehicle, onClose }) {
 
   return (
     <div className="modal-backdrop" onMouseDown={onClose}>
-      <article className="vehicle-modal" onMouseDown={(event) => event.stopPropagation()}>
-        <button className="modal-close" type="button" onClick={onClose} aria-label="Fechar detalhes">
+      <article ref={modalRef} className="vehicle-modal" role="dialog" aria-modal="true" aria-labelledby="vehicle-modal-title" onMouseDown={(event) => event.stopPropagation()}>
+        <button ref={closeRef} className="modal-close" type="button" onClick={onClose} aria-label="Fechar detalhes">
           <X />
         </button>
 
@@ -80,7 +100,7 @@ export function VehicleModal({ vehicle, onClose }) {
 
         <div className="modal-details">
           <p className="modal-brand">{vehicle.brand} · {vehicle.category}</p>
-          <h2>{vehicle.model}</h2>
+          <h2 id="vehicle-modal-title">{vehicle.model}</h2>
           <p className="modal-version">{vehicle.version}</p>
 
           <div className="modal-price">
@@ -91,25 +111,16 @@ export function VehicleModal({ vehicle, onClose }) {
           <div className="modal-facts">
             <span><CalendarDays /> <small>Ano</small><strong>{vehicle.year}</strong></span>
             <span><Gauge /> <small>Quilometragem</small><strong>{vehicle.mileage || 'Sob consulta'}</strong></span>
-            <span><Settings2 /> <small>Câmbio</small><strong>{vehicle.transmission}</strong></span>
+            <span><Cog /> <small>Câmbio</small><strong>{vehicle.transmission}</strong></span>
             <span><Fuel /> <small>Combustível</small><strong>{vehicle.fuel}</strong></span>
             <span><Palette /> <small>Cor</small><strong>{vehicle.color}</strong></span>
-            <span><Settings2 /> <small>Motor</small><strong>{vehicle.engine}</strong></span>
+            <span><Wrench /> <small>Motor</small><strong>{vehicle.engine}</strong></span>
           </div>
 
           <p className="modal-description">{vehicle.description}</p>
 
-          <div className="modal-features">
-            <h3>Principais itens</h3>
-            <ul>
-              {vehicle.features.map((feature) => (
-                <li key={feature}><Check size={16} /> {feature}</li>
-              ))}
-            </ul>
-          </div>
-
           <a className="button button-primary modal-call" href={STORE_INFO.whatsappHref} target="_blank" rel="noreferrer">
-            <MessageCircle size={19} />
+            <WhatsAppMark size={20} />
             Consultar no WhatsApp
           </a>
           <p className="modal-note">Confirme disponibilidade e demais informações diretamente com a loja.</p>
